@@ -1,0 +1,19 @@
+CC = gcc
+OPENSSL_PATH = /opt/homebrew/opt/openssl@3
+CFLAGS = -I.. -I/Users/koh-mac/Documents/picotls/include -I$(OPENSSL_PATH)/include -O3 -Wall
+LDFLAGS = ../../libpicoquic-core.a ../../libpicoquic-log.a \
+          /Users/koh-mac/Documents/picotls/libpicotls-openssl.a \
+          /Users/koh-mac/Documents/picotls/libpicotls-minicrypto.a \
+          /Users/koh-mac/Documents/picotls/libpicotls-core.a \
+          -L$(OPENSSL_PATH)/lib -lssl -lcrypto -lpthread
+
+all: test_server test_client
+
+test_server: test_server.c
+	$(CC) $(CFLAGS) -o test_server test_server.c $(LDFLAGS)
+
+test_client: test_client.c
+	$(CC) $(CFLAGS) -o test_client test_client.c $(LDFLAGS)
+
+clean:
+	rm -f test_server test_client
